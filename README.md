@@ -43,8 +43,8 @@ No necesitas instalar Flask, Django, Node.js ni paquetes externos.
 Clona el repositorio o descarga el script:
 
 ```bash
-git clone https://github.com/TU_USUARIO/TU_REPO.git
-cd TU_REPO
+git clone https://github.com/Yextep/LAN-SHARE
+cd LAN-SHARE
 ```
 
 Da permisos de ejecucion:
