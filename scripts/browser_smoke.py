@@ -42,7 +42,7 @@ def main():
             page.get_by_role("button", name="Inicio", exact=True).click()
             page.get_by_label("Crear carpeta", exact=True).click()
             page.get_by_label("Nombre de la carpeta").fill("Fotos")
-            page.get_by_role("button", name="Crear carpeta", exact=True).click()
+            page.get_by_role("dialog").get_by_role("button", name="Crear carpeta", exact=True).click()
             page.wait_for_function("() => document.querySelectorAll('.file-row').length===4")
             page.get_by_role("button", name="Fotos Carpeta · Abrir carpeta").click()
             page.wait_for_function("() => currentPath==='Fotos'")
@@ -59,6 +59,9 @@ def main():
                 page.set_viewport_size({"width": width, "height": 844})
                 assert page.evaluate("document.documentElement.scrollWidth<=innerWidth"), f"overflow at {width}"
             page.set_viewport_size({"width": 390, "height": 844})
+            backend.delete_path('<img onerror="window.injection=true">.txt')
+            page.evaluate("loadFiles()")
+            page.wait_for_function("() => document.querySelectorAll('.file-row').length===3")
             page.evaluate("document.querySelector('#toast').hidden=true")
             (ROOT / "docs").mkdir(exist_ok=True)
             page.screenshot(path=str(ROOT / "docs/brisa-claro.png"), full_page=True)
