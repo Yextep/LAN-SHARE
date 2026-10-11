@@ -983,7 +983,7 @@ class LANShareHandler(BaseHTTPRequestHandler):
         if content_type.startswith("text/html"):
             self.send_header(
                 "Content-Security-Policy",
-                "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'",
+                "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'",
             )
         if headers:
             for key, value in headers.items():
@@ -1032,6 +1032,8 @@ class LANShareHandler(BaseHTTPRequestHandler):
 
         entries: list[dict[str, Any]] = []
         for child in target.iterdir():
+            if child.name.startswith(".upload-") and child.name.endswith(".part"):
+                continue
             try:
                 resolved = child.resolve(strict=True)
                 if not is_within(self.server.root, resolved):
@@ -1185,6 +1187,8 @@ class LANShareHandler(BaseHTTPRequestHandler):
                 dirs[:] = safe_dirs
 
                 for filename in files:
+                    if filename.startswith(".upload-") and filename.endswith(".part"):
+                        continue
                     file_path = current_path / filename
                     try:
                         if file_path.is_symlink():

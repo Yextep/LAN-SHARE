@@ -1,5 +1,11 @@
 # LAN Share
 
+## Brisa: app para Android
+
+Este proyecto también incluye **Brisa**, una app autónoma con modos claro y oscuro, interfaz de cristal, enlace y QR por sesión, selector de archivos de Android y servicio para compartir en segundo plano.
+
+La app incluye el servidor Python: abre Brisa, añade tus archivos y toca **Empezar a compartir**. Otros dispositivos acceden desde su navegador en la misma red Wi-Fi. Consulta [uso y compilación de Brisa](android/README.md). El APK firmado se genera con [GitHub Actions](../../actions/workflows/brisa-apk.yml).
+
 Servidor web local, simple y sin dependencias externas, para enviar y recibir archivos entre dispositivos conectados a la misma red local.
 
 `LAN Share` nace como una alternativa mas completa a:
