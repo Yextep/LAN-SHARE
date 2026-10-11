@@ -1,7 +1,6 @@
 """Run the production UI against the production HTTP backend."""
 from pathlib import Path
 import os
-import shutil
 import sys
 import tempfile
 import urllib.parse
@@ -16,10 +15,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix="brisa-ui-") as directory:
         url = backend.start(directory)
         with sync_playwright() as playwright:
-            executable = shutil.which("chromium") or shutil.which("google-chrome")
             options = {"headless": True}
-            if executable:
-                options["executable_path"] = executable
             if os.environ.get("BRISA_CHROMIUM_SINGLE_PROCESS"):
                 options["args"] = ["--single-process", "--no-zygote", "--disable-gpu"]
             browser = playwright.chromium.launch(**options)
@@ -35,7 +31,7 @@ def main():
                 {"name": "Recuerdos.jpg", "mimeType": "image/jpeg", "buffer": b"test-image"},
                 {"name": '<img onerror="window.injection=true">.txt', "mimeType": "text/plain", "buffer": b"safe"},
             ])
-            page.wait_for_function("document.querySelectorAll('.file-row').length===3")
+            page.wait_for_function("() => document.querySelectorAll('.file-row').length===3")
             assert page.evaluate("window.injection===undefined")
             page.get_by_label("Buscar archivos").fill("viaje")
             assert page.locator(".file-row").count() == 1
@@ -47,11 +43,11 @@ def main():
             page.get_by_label("Crear carpeta", exact=True).click()
             page.get_by_label("Nombre de la carpeta").fill("Fotos")
             page.get_by_role("button", name="Crear carpeta", exact=True).click()
-            page.wait_for_function("document.querySelectorAll('.file-row').length===4")
+            page.wait_for_function("() => document.querySelectorAll('.file-row').length===4")
             page.get_by_role("button", name="Fotos Carpeta · Abrir carpeta").click()
-            page.wait_for_function("currentPath==='Fotos'")
+            page.wait_for_function("() => currentPath==='Fotos'")
             page.get_by_role("button", name="Mis archivos", exact=True).click()
-            page.wait_for_function("currentPath===''")
+            page.wait_for_function("() => currentPath===''")
             page.get_by_role("button", name="Ajustes", exact=True).click()
             page.get_by_role("button", name="Claro", exact=True).click()
             assert page.locator("html").get_attribute("data-theme") == "light"
@@ -84,7 +80,7 @@ def main():
                 guest.get_by_label("Guardar Ideas para el viaje.txt", exact=True).click()
             assert Path(download.value.path()).read_bytes() == b"Una brisa"
             guest.locator("#file-input").set_input_files({"name": "desde-pc.txt", "mimeType": "text/plain", "buffer": b"enviado"})
-            guest.wait_for_function("transfers.length===1&&transfers[0].done")
+            guest.wait_for_function("() => transfers.length===1&&transfers[0].done")
             assert (Path(directory) / "desde-pc.txt").read_bytes() == b"enviado"
             backend.set_read_only(True)
             guest.reload()

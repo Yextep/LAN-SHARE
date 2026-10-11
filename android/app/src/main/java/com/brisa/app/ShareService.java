@@ -25,7 +25,7 @@ public final class ShareService extends Service {
         PendingIntent open = PendingIntent.getActivity(this, 1, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent stop = PendingIntent.getService(this, 2, new Intent(this, ShareService.class).setAction(STOP), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         Notification.Builder builder = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(this, "sharing") : new Notification.Builder(this);
-        Notification notification = builder.setSmallIcon(R.drawable.ic_launcher).setContentTitle("Brisa está compartiendo")
+        Notification notification = builder.setSmallIcon(R.drawable.ic_notification).setContentTitle("Brisa está compartiendo")
             .setContentText("Tus archivos están disponibles en tu red local.")
             .setContentIntent(open).setOngoing(true).addAction(new Notification.Action.Builder(null, "Detener", stop).build()).build();
         try {

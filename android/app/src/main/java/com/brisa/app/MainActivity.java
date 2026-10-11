@@ -190,6 +190,15 @@ public final class MainActivity extends Activity {
                 } catch (Exception e) { notice("No se pudo abrir el enlace. Comprueba que tienes un navegador instalado.",true); }
             });
         }
+        @JavascriptInterface public void deleteFile(String path, String name) {
+            runOnUiThread(() -> new AlertDialog.Builder(MainActivity.this).setTitle("¿Eliminar de Brisa?")
+                .setMessage(name + "\n\nSe eliminará esta copia de Brisa. Los archivos originales que añadiste desde tu teléfono se conservan.")
+                .setNegativeButton("Cancelar", null).setPositiveButton("Eliminar", (dialog, which) ->
+                    BrisaRuntime.worker.execute(() -> {
+                        try { BrisaRuntime.module().callAttr("delete_path",path); evaluate("loadFiles()"); notice("Eliminado de Brisa.", false); }
+                        catch (Exception error) { notice("No se pudo eliminar. El archivo podría estar en uso.", true); }
+                    })).show());
+        }
         @JavascriptInterface public void saveFile(String url, String filename) {
             runOnUiThread(() -> {
                 Uri uri=Uri.parse(url);

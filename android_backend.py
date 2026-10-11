@@ -5,6 +5,7 @@ import contextlib
 import ipaddress
 import json
 import secrets
+import shutil
 import threading
 from pathlib import Path
 
@@ -123,3 +124,18 @@ def stop():
         server.sharing = False
         server.shutdown()
         server.server_close()
+
+
+def delete_path(value):
+    """Native-only management; guests have no HTTP delete endpoint."""
+    parts = core.safe_parts(value, allow_empty=False)
+    path = _server.root.joinpath(*parts)
+    if not core.is_within(_server.root, path.resolve()) or path.resolve() == _server.root:
+        raise ValueError("Ruta no permitida")
+    with _server.write_lock:
+        if path.is_symlink() or path.is_file():
+            path.unlink()
+        elif path.is_dir():
+            shutil.rmtree(path)
+        else:
+            raise FileNotFoundError("El archivo ya no existe")

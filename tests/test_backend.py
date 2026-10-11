@@ -103,6 +103,18 @@ class BrisaProtocolTests(unittest.TestCase):
         self.assertIn("frame-ancestors 'none'", headers["Content-Security-Policy"])
         self.assertNotIn("token", json.loads(self.call("/api/status")[1]))
 
+    def test_native_delete_cannot_escape_root_and_guests_cannot_delete(self):
+        self.call("/api/upload", {"name": "remove.txt"}, b"test")
+        backend.set_sharing(True)
+        self.assertEqual(self.call("/api/delete", {"p": "remove.txt"}, b"", token=backend._server.token)[0], 404)
+        self.assertTrue((self.root / "remove.txt").exists())
+        backend.delete_path("remove.txt")
+        self.assertFalse((self.root / "remove.txt").exists())
+        with self.assertRaises(Exception):
+            backend.delete_path("../")
+        with self.assertRaises(Exception):
+            backend.delete_path("")
+
 
 if __name__ == "__main__":
     unittest.main()
