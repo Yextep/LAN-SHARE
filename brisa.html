@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0e1418">
 <title>Brisa · Comparte cerca</title>
-<script>try{document.documentElement.dataset.theme=localStorage.getItem('brisa-theme')||'dark'}catch(e){}</script>
+<script>try{document.documentElement.dataset.theme=(typeof Android!=='undefined'?Android.getTheme():localStorage.getItem('brisa-theme'))||'dark'}catch(e){}</script>
 <style>
 :root{color-scheme:dark;--bg:#0e1418;--surface:rgba(28,39,44,.7);--solid:#1a252b;--text:#f3f8f3;--muted:#96a9ac;--line:rgba(194,226,220,.10);--accent:#bdff88;--ink:#17321e;--tint:rgba(189,255,136,.10);--cyan:#85ddd9;--shadow:0 18px 50px #0002}
 :root[data-theme=light]{color-scheme:light;--bg:#f3f6ef;--surface:rgba(255,255,255,.75);--solid:#fff;--text:#1b3028;--muted:#60756b;--line:rgba(33,73,53,.12);--accent:#315d26;--ink:#fff;--tint:rgba(99,157,64,.10);--cyan:#287f7c;--shadow:0 15px 40px #23452c0a}

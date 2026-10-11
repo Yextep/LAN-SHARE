@@ -148,6 +148,7 @@ public final class MainActivity extends Activity {
             });
         }
         @JavascriptInterface public void theme(String theme) {
+            getSharedPreferences("brisa",MODE_PRIVATE).edit().putString("theme", "light".equals(theme)?"light":"dark").apply();
             runOnUiThread(() -> {
                 boolean light = "light".equals(theme);
                 int color = light ? Color.rgb(243,246,239) : Color.rgb(14,20,24);
@@ -157,6 +158,9 @@ public final class MainActivity extends Activity {
                 if (Build.VERSION.SDK_INT >= 26 && light) flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                 getWindow().getDecorView().setSystemUiVisibility(flags);
             });
+        }
+        @JavascriptInterface public String getTheme() {
+            return getSharedPreferences("brisa",MODE_PRIVATE).getString("theme","dark");
         }
         @JavascriptInterface public void copyLink(String link) {
             runOnUiThread(() -> { ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Brisa",link)); notice("Enlace copiado.", false); });

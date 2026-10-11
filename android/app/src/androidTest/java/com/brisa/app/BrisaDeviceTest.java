@@ -57,6 +57,9 @@ public class BrisaDeviceTest {
             evaluate("setTheme('light')");screenshot("brisa-android-claro.png");
             assertEquals("true",evaluate("document.documentElement.scrollWidth<=innerWidth"));
             assertEquals("true",evaluate("localStorage.getItem('brisa-theme')==='light'"));
+            assertEquals("light",activity.getSharedPreferences("brisa",android.content.Context.MODE_PRIVATE).getString("theme",""));
+            evaluate("localStorage.removeItem('brisa-theme');location.reload()");
+            waitFor("document.documentElement.dataset.theme==='light'&&document.querySelectorAll('.file-row').length===3");
             evaluate("showScreen('settings');document.querySelector('#readonly-toggle').click()");
             waitFor("document.querySelector('#add-files').disabled");
             evaluate("document.querySelector('#readonly-toggle').click();showScreen('home')");

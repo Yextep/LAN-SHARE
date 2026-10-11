@@ -20,7 +20,7 @@ def main():
                 options["args"] = ["--single-process", "--no-zygote", "--disable-gpu"]
             browser = playwright.chromium.launch(**options)
             context = browser.new_context(viewport={"width": 390, "height": 844}, reduced_motion="reduce")
-            context.add_init_script("""window.Android={ready(){},theme(){},setSharing(){},setReadOnly(){},copyLink(){},shareLink(){},showQr(){},saveFile(){},openPeer(){},closeApp(){}}""")
+            context.add_init_script("""window.Android={getTheme(){return localStorage.getItem('brisa-theme')||'dark'},ready(){},theme(){},setSharing(){},setReadOnly(){},copyLink(){},shareLink(){},showQr(){},saveFile(){},openPeer(){},closeApp(){}}""")
             page = context.new_page()
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
