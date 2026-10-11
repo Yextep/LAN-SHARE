@@ -34,8 +34,13 @@ public class BrisaDeviceTest {
     private void screenshot(String name) throws Exception {
         evaluate("document.querySelector('#toast').hidden=true");
         Thread.sleep(1200);
-        java.io.File directory=new java.io.File(activity.getExternalFilesDir(null),"screenshots");directory.mkdirs();
-        try(java.io.FileOutputStream out=new java.io.FileOutputStream(new java.io.File(directory,name))) {
+        ContentValues values=new ContentValues();
+        values.put(MediaStore.Downloads.DISPLAY_NAME,name);
+        values.put(MediaStore.Downloads.MIME_TYPE,"image/png");
+        values.put(MediaStore.Downloads.RELATIVE_PATH,"Download/");
+        Uri destination=activity.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,values);
+        assertNotNull(destination);
+        try(java.io.OutputStream out=activity.getContentResolver().openOutputStream(destination)) {
             InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot().compress(android.graphics.Bitmap.CompressFormat.PNG,100,out);
         }
     }

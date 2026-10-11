@@ -2,8 +2,8 @@
 set -eu
 mkdir -p docs
 if (cd android && ./gradlew --no-daemon connectedDebugAndroidTest); then
-    adb pull /sdcard/Android/data/com.brisa.app/files/screenshots/brisa-android-oscuro.png docs/brisa-android-oscuro.png
-    adb pull /sdcard/Android/data/com.brisa.app/files/screenshots/brisa-android-claro.png docs/brisa-android-claro.png
+    adb pull /sdcard/Download/brisa-android-oscuro.png docs/brisa-android-oscuro.png
+    adb pull /sdcard/Download/brisa-android-claro.png docs/brisa-android-claro.png
 else
     brisa_test_status=$?
     adb logcat -d -t 2000 > docs/android-logcat.txt
